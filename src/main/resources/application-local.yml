@@ -1,0 +1,13 @@
+# for local
+
+# application.yml
+websocket:
+  target:
+    url: "ws://localhost:8080/ws-for-app"
+    #url: ws://192.168.0.100:8080/ws-for-app # 운영 환경일 경우 wss://domain.com/ws-for-app
+
+
+#고정 서버(온프레미스) 환경: 외부 주입 방식
+server:
+  id: ${SERVER_ID:DEFAULT_SERVER} # 환경변수 SERVER_ID를 읽고, 없으면 DEFAULT_SERVER 사용
+      

@@ -1,0 +1,39 @@
+#
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: spring-boot4-websocket
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+# thymleaf
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:templates/
+    suffix: .html
+    mode: HTML
+    cache: false #cache 사용안함
+#    order: 0
+
+
+# logging
+logging:
+  pattern:
+    console: "%d{MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%t] %clr(%logger{36}){cyan} [%L] | %msg%n"
+  level:
+    # SQL LOG
+    jdbc: OFF
+    jdbc.audit: OFF
+    jdbc.connection: OFF
+    jdbc.resultset: OFF
+    jdbc.resultsettable: INFO
+    jdbc.sqlonly: OFF
+    jdbc.sqltiming: DEBUG
+
+    root: INFO
+    com.example : DEBUG
+

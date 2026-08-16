@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>App2 Client (발신측)</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+    <h2>📱 App2 Client</h2>
+    
+    <div>
+        <label>User ID: </label>
+        <input type="text" id="userId" value="USER_02">
+        <button onclick="connectApp()">소켓 연결</button>
+        <button onclick="disconnect()" class="btn btn-secondary">웹소켓 연결 해제</button>
+        <!-- ★ 상태 점검 버튼 추가 -->
+        <button onclick="requestHealthCheck()">상태 점검</button> 
+    </div>
+    
+    <hr>
+    
+    <div>
+        <label>전송할 메시지: </label>
+        <input type="text" id="message" value="상담원 연결 부탁드립니다.">
+        <button onclick="sendToTm()">TM AP로 토스 전송</button>
+    </div>
+
+    <h3>로그</h3>
+    <pre id="log" style="background:#f4f4f4; padding:10px;"></pre>
+
+    <script>
+        let stompClient = null;
+
+        function log(msg) {
+            document.getElementById('log').innerText += msg + '\n';
+        }
+
+        function connectApp() {
+            const userId = document.getElementById('userId').value;
+            const socket = new SockJS('http://localhost:8080/ws-for-app');
+            stompClient = Stomp.over(socket);
+
+            // STOMP 연결 헤더 (UserSessionManager 구분값)
+            /*
+            const headers = {
+                'userId': userId,
+                'clientType': 'APP'
+            };
+
+            stompClient.connect(headers, function (frame) {
+                log('✅ 앱 웹소켓 연결 성공: ' + frame);
+            }, function (error) {
+                log('❌ 연결 실패: ' + error);
+            });
+            */
+            stompClient.connect({}, function (frame) {
+                log('✅ 앱 웹소켓 연결 성공1: ' + frame);
+
+                // ★ [위치 1] 연결 성공 콜백 내부에 구독(subscribe) 구문 추가
+                stompClient.subscribe('/sub/session/status/' + userId, function (response) {
+                    const status = JSON.parse(response.body);
+                    console.log("📊 연결 상태 결과:", status);
+
+                    if (status.statusSummary === 'BOTH_CONNECTED') {
+                        log('✅ 앱과 TM AP가 모두 정상 연결된 상태입니다.');
+                    } else {
+                        log(`⚠️ 연결 상태 경고: ${status.statusSummary}`);
+                    }
+                });
+
+                // ★ [추가] 서버로부터 실패/응답 메시지를 전달받을 본인 전용 채널 구독
+                stompClient.subscribe('/sub/app/' + userId, function (response) {
+                    const res = JSON.parse(response.body);
+                    
+                    if (res.type === 'FAIL') {
+                        alert('⚠️ 전송 실패: ' + res.message);
+                        log('❌ [서버 실패 응답 수신] ' + res.message);
+                    } else {
+                        log('📩 [앱 수신 메시지] ' + JSON.stringify(res));
+                    }
+                });
+
+                // [Step 1] 연결 성공 직후 사용자 정보를 서버로 전송 (/pub/user/init)
+                const userInfoPayload = {
+                    userId: userId,
+                    userName: userId,
+                    deviceType: 'APP'
+                };
+                stompClient.send('/pub/user/init2', {}, JSON.stringify(userInfoPayload));
+                log(`[서버 등록 완료] 사용자 정보 전송: ${JSON.stringify(userInfoPayload)}`);
+
+            }, function (error) {
+                log('❌ 연결 실패: ' + error);
+            });
+        }
+
+        function sendToTm() {
+            if (!stompClient || !stompClient.connected) {
+                alert('웹소켓 연결을 먼저 진행해주세요.');
+                return;
+            }
+
+            const userId = document.getElementById('userId').value;
+            const messageText = document.getElementById('message').value;
+
+            // CallMessage record 규격 (sender, type, message)
+            const payload = {
+                sender: userId,
+                type: 'CALL_REQ',
+                message: messageText
+            };
+
+            const headers = {
+                'userId': userId
+            };
+
+            // /pub/app/to-tm 컨트롤러 매핑 주소로 전송
+            stompClient.send('/pub/app/to-tm', headers, JSON.stringify(payload));
+            log('📤 TM AP로 메시지 발송 완료: ' + JSON.stringify(payload));
+        }
+
+        // ========================================================
+        // ★ [위치 2] <script> 내부에 독립 함수로 상태 요청 구문 추가
+        // ========================================================
+        function requestHealthCheck() {
+            if (!stompClient || !stompClient.connected) {
+                alert('웹소켓 연결을 먼저 진행해주세요.');
+                return;
+            }
+            const userId = document.getElementById('userId').value;
+            stompClient.send('/pub/session/check', {'userId': userId}, {});
+            log('🔍 서버에 연결 상태 점검 요청을 보냈습니다.');
+        }
+
+        // 연결 해제
+        function disconnect() {
+            if (stompClient !== null && stompClient.connected) {
+                stompClient.disconnect(function () {
+                    log('🔌 DISCONNECTED: 웹소켓 연결이 해제되었습니다.');
+                });
+            } else {
+                log('🔌 웹소켓 연결을 먼저 진행해 주세요.');
+            }
+        }
+    </script>
+</body>
+</html>

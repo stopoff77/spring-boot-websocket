@@ -1,0 +1,20 @@
+# for dev
+
+# 클라우드 / 오토스케일링 환경: 동적 고유 ID 생성
+# 방법 A: YAML 및 Spring 표현식(SpEL) 활용 (가장 간편)
+server:
+  # 1) 호스트명 활용 (예: app-pod-86478d586c-4k2lz)
+  id: ${HOSTNAME:${COMPUTERNAME:UNKNOWN_HOST}}
+
+  # 2) 또는 매번 난수 생성 (UUID)
+  # id: ${random.uuid}
+
+# 방법 B: 쿠버네티스(K8s) Downward API 활용
+# deployment.yaml
+env:
+  - name: SERVER_ID
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name # 생성된 Pod 이름 (예: my-app-7d4b46c64c-x9z2p)
+
+
