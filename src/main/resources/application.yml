@@ -5,6 +5,9 @@ spring:
     active: local
   application:
     name: spring-boot4-websocket
+  config:
+    import:
+      - classpath:datasource-memory-for-local.yml
   servlet:
     encoding:
       charset: UTF-8

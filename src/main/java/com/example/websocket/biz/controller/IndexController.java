@@ -1,5 +1,7 @@
 package com.example.websocket.biz.controller;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,6 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class IndexController {
+
+    DataSource dataSource;
+
+
+    public IndexController(DataSource dataSource) {
+        this.dataSource = dataSource;
+
+        log.debug("dataSource {}", dataSource);
+    }
+
 
     @RequestMapping(value = { "", "/", "/index" })
     public String index() {

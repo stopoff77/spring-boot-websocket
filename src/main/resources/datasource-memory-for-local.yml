@@ -1,0 +1,46 @@
+#
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 애플리케이션 시점 생성 후 종료 시 삭제 (테스트용)
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+# H2 memory db
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      schema-locations:
+        - classpath:testdb/schema/callMessage_DDL_H2.sql
+
+  # datasource
+  datasource:
+    # H2 memory db 계정
+    #url: jdbc:h2:mem:testdb # memery db url
+#    url: jdbc:log4jdbc:h2:mem:testdb # memery db url
+#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    username: sa
+#    password: ENC(ULMN6NnxrltiAdM5/Se8bmZKo1esv6UzN5jdsc35SKk=) #1234
+
+    # H2 memory db 계정 - hikari 설정
+    hikari:
+      jdbc-url: jdbc:log4jdbc:h2:mem:testdb # memery db url
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      username: sa
+      password: 1234
+
+      pool-name: hikari-cp
+      maximum-pool-size: 1
+      minimum-idle: 1
+      data-source-properties:
+        cachePrepstmts: true
+        prepStmtCacheSize: 270
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        close-method: close
+
