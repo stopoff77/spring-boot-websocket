@@ -5,6 +5,9 @@ spring:
     active: local
   application:
     name: spring-boot4-websocket
+  aop: #
+    proxy-target-class: true # default true
+    auto: true # default true
   config:
     import:
       - classpath:datasource-memory-for-local.yml
