@@ -16,21 +16,15 @@ spring:
   sql:
     init:
       schema-locations:
-        - classpath:testdb/schema/callMessage_DDL_H2.sql
-
+        - classpath:testdb/schema/callMsg_DDL_H2.sql
   # datasource
   datasource:
-    # H2 memory db 계정
-    #url: jdbc:h2:mem:testdb # memery db url
-#    url: jdbc:log4jdbc:h2:mem:testdb # memery db url
-#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-#    username: sa
-#    password: ENC(ULMN6NnxrltiAdM5/Se8bmZKo1esv6UzN5jdsc35SKk=) #1234
-
     # H2 memory db 계정 - hikari 설정
     hikari:
-      jdbc-url: jdbc:log4jdbc:h2:mem:testdb # memery db url
-      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#      jdbc-url: jdbc:log4jdbc:h2:mem:testdb # memery db url
+#      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:h2:mem:testdb # memery db url
+      driver-class-name: org.h2.Driver
       username: sa
       password: 1234
 
