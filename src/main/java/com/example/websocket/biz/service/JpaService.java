@@ -23,6 +23,10 @@ public class JpaService {
     public Long createItem(CallMessageDto.CreateRequest request) {
         CallMessageEntity entity      = request.toEntity();
         CallMessageEntity savedEntity = repository.save(entity);
+
+        String str = null;
+        str.toString();
+
         return savedEntity.getId();
     }
 

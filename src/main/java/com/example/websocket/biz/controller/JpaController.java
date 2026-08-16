@@ -23,6 +23,13 @@ public class JpaController {
 
     private final JpaService jpaService;
 
+    @GetMapping("/create")
+    public ResponseEntity<Long> createItem() {
+        CallMessageDto.CreateRequest request = new CallMessageDto.CreateRequest("가나다", 1000, 20);
+        Long                         id      = jpaService.createItem(request);
+        return ResponseEntity.ok(id);
+    }
+
     @PostMapping
     public ResponseEntity<Long> createItem(@RequestBody CallMessageDto.CreateRequest request) {
         Long id = jpaService.createItem(request);
