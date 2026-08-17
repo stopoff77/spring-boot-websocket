@@ -3,6 +3,7 @@ package com.example.websocket.biz.health.scheduler;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.example.websocket.biz.dual.dto.UserSessionStatus;
 import com.example.websocket.configuration.websocket.session.manager.DualSessionManager;
@@ -10,20 +11,19 @@ import com.example.websocket.configuration.websocket.session.manager.DualSession
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Deprecated
 @Slf4j
-//@Component
+@Component
 @RequiredArgsConstructor
-public class SessionHealthScheduler {
+public class RedisSessionHealthScheduler {
 
     private final DualSessionManager sessionManager;
 
     /**
      * 30초마다 주기적으로 전체 웹소켓 연결 상태 점검 (30,000ms)
      */
-    @Deprecated
     @Scheduled(fixedRate = 30000)
     public void monitorSessionHealth() {
+        // Redis 전체 키(WS_SESSION:*) 스캔을 통한 전역 세션 리스트 수집 (메서드명 통일: getAllSessionStatuses)
         List<UserSessionStatus> statuses = sessionManager.getAllSessionStatuses();
 
         if (statuses.isEmpty()) {
