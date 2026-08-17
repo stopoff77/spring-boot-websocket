@@ -9,7 +9,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 import com.example.websocket.biz.call.dto.CallMessage;
-import com.example.websocket.biz.dto.UserInfo;
+import com.example.websocket.biz.dual.dto.UserInfo;
 
 import lombok.extern.slf4j.Slf4j;
 

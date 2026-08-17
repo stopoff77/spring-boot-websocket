@@ -9,8 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import com.example.websocket.biz.dto.UserInfo;
 import com.example.websocket.biz.dual.dto.DualCallMessage;
+import com.example.websocket.biz.dual.dto.UserInfo;
 import com.example.websocket.configuration.websocket.session.manager.DualSessionManager;
 
 import lombok.RequiredArgsConstructor;

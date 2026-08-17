@@ -1,4 +1,4 @@
-package com.example.websocket.biz.dto;
+package com.example.websocket.biz.dual.dto;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
