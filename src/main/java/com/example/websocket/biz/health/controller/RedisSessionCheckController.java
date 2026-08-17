@@ -6,7 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.example.websocket.biz.dual.dto.UserSessionStatus;
-import com.example.websocket.configuration.websocket.session.manager.DualSessionManager;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RedisSessionCheckController {
 
-    private final DualSessionManager    sessionManager;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final UserSessionManagerForRedis sessionManager;
+    private final SimpMessagingTemplate      messagingTemplate;
 
     /**
      * 클라이언트 요청으로 소켓 연결 상태 실시간 점검 (Redis 전역 조회)

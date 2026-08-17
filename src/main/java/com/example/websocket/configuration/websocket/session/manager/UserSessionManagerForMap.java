@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserSessionManager {
+public class UserSessionManagerForMap {
 
     // Key: userId, Value: WebSocket Session ID (1인당 1기기 기준)
     private final Map<String, String> userToSessionMap = new ConcurrentHashMap<>();

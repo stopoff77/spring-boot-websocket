@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import com.example.websocket.biz.call.dto.CallMessage;
 import com.example.websocket.biz.dual.dto.UserInfo;
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForMap;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CallController {
 
     private final SimpMessageSendingOperations messagingTemplate;
-    private final UserSessionManager           sessionManager;
+    private final UserSessionManagerForMap     sessionManager;
 
     // 네이티브 앱이 연결 직후 /pub/user/init 으로 본인 정보를 보냄
 //    @MessageMapping("/user/init")

@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DualSessionManager {
+public class UserSessionManagerForRedis {
 
     private final StringRedisTemplate redisTemplate;
 

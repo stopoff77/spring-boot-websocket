@@ -7,7 +7,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-import com.example.websocket.configuration.websocket.session.manager.DualSessionManager;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 //@Component
 @RequiredArgsConstructor
-public class DualStompHandler implements ChannelInterceptor {
+public class MapStompHandler implements ChannelInterceptor {
 
-    private final DualSessionManager sessionManager;
+    private final UserSessionManagerForRedis sessionManager;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

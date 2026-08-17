@@ -7,7 +7,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForMap;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
 
-    private final UserSessionManager sessionManager;
+    private final UserSessionManagerForMap sessionManager;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

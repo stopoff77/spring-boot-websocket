@@ -7,7 +7,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForMap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class WebSocketEventListener {
 
-    private final UserSessionManager sessionManager;
+    private final UserSessionManagerForMap sessionManager;
 
 
-    public WebSocketEventListener(UserSessionManager sessionManager) {
+    public WebSocketEventListener(UserSessionManagerForMap sessionManager) {
         this.sessionManager = sessionManager;
     }
 
