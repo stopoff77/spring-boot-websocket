@@ -1,5 +1,8 @@
 package com.example.websocket.configuration.websocket.session.dto;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public record UserSession(
         String userId,
         String appSessionId,
@@ -17,5 +20,11 @@ public record UserSession(
     // 두 세션 모두 종료되었는지 확인
     public boolean isEmpty() {
         return appSessionId == null && tmSessionId == null;
+    }
+
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.JSON_STYLE);
     }
 }

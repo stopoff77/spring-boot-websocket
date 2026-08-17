@@ -87,7 +87,10 @@
                     userName: userId,
                     deviceType: 'APP'
                 };
-                stompClient.send('/pub/user/init2', {}, JSON.stringify(userInfoPayload));
+                
+                //const userInitUrl = '/pub/user/init2';
+                const userInitUrl = '/pub/user/init3';
+                stompClient.send(userInitUrl, {}, JSON.stringify(userInfoPayload));
                 log(`[서버 등록 완료] 사용자 정보 전송: ${JSON.stringify(userInfoPayload)}`);
 
             }, function (error) {
@@ -116,7 +119,9 @@
             };
 
             // /pub/app/to-tm 컨트롤러 매핑 주소로 전송
-            stompClient.send('/pub/app/to-tm', headers, JSON.stringify(payload));
+            //const toUrl = '/pub/app/to-tm';
+            const toUrl = '/pub/app/to-tm2';
+            stompClient.send(toUrl, headers, JSON.stringify(payload));
             log('📤 TM AP로 메시지 발송 완료: ' + JSON.stringify(payload));
         }
 

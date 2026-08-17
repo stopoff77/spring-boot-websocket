@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import com.example.websocket.configuration.websocket.handler.DualStompHandler;
+import com.example.websocket.configuration.websocket.handler.RedisStompHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
 //    private final StompHandler     stompHandler;    // 1. 주입 받기
-    private final DualStompHandler dualStompHandler;
+//    private final DualStompHandler dualStompHandler;
+    private final RedisStompHandler redisStompHandler;
 
 
     @Override
@@ -56,6 +57,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
 //        registration.interceptors(stompHandler);
-        registration.interceptors(dualStompHandler);
+//        registration.interceptors(dualStompHandler);
+        registration.interceptors(redisStompHandler);
     }
 }

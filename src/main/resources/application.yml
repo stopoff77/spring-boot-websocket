@@ -3,14 +3,19 @@
 spring:
   profiles:
     active: local
+  config:
+    import:
+      - classpath:datasource-memory-for-local.yml
   application:
     name: spring-boot4-websocket
   aop: #
     proxy-target-class: true # default true
     auto: true # default true
-  config:
-    import:
-      - classpath:datasource-memory-for-local.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      #password: 1234
   servlet:
     encoding:
       charset: UTF-8
