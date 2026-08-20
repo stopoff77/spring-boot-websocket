@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import com.example.websocket.configuration.websocket.handler.DualStompHandler;
+import com.example.websocket.configuration.handler.DualStompHandler;
 
 import lombok.RequiredArgsConstructor;
 

@@ -3,14 +3,8 @@
 spring:
   profiles:
     active: local
-  config:
-    import:
-      - classpath:datasource-memory-for-local.yml
   application:
     name: spring-boot4-websocket
-  aop: #
-    proxy-target-class: true # default true
-    auto: true # default true
   servlet:
     encoding:
       charset: UTF-8

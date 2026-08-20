@@ -61,10 +61,7 @@
                     userName: userId,
                     deviceType: 'TM'
                 };
-                
-                //const userInitUrl = '/pub/user/init2';
-                const userInitUrl = '/pub/user/init3';
-                stompClient.send(userInitUrl, {}, JSON.stringify(userInfoPayload));
+                stompClient.send('/pub/user/init2', {}, JSON.stringify(userInfoPayload));
                 log(`[서버 등록 완료] 사용자 정보 전송: ${JSON.stringify(userInfoPayload)}`);
 
                 stompClient.subscribe('/sub/tm/' + userId, function (response) {

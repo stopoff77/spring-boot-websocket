@@ -100,9 +100,7 @@
             };
 
             // /pub/app/to-tm 컨트롤러 매핑 주소로 전송
-            const toUrl = '/pub/app/to-tm';
-            //const toUrl = '/pub/app/to-tm2';
-            stompClient.send(toUrl, headers, JSON.stringify(payload));
+            stompClient.send('/pub/app/to-tm', headers, JSON.stringify(payload));
             log('📤 TM AP로 메시지 발송 완료: ' + JSON.stringify(payload));
         }
 
