@@ -9,7 +9,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
 import com.example.websocket.configuration.websocket.session.service.RedisSessionService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RedisStompHandler implements ChannelInterceptor {
 
-    private final UserSessionManagerForRedis localSessionManager;
-    private final RedisSessionService        redisSessionService;
+    private final UserSessionManager  localSessionManager;
+    private final RedisSessionService redisSessionService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

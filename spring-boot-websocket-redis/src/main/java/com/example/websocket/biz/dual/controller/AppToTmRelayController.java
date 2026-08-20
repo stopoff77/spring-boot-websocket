@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.example.websocket.biz.dual.dto.DualCallMessage;
 import com.example.websocket.biz.dual.dto.UserInfo;
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AppToTmRelayController {
 
-    private final SimpMessagingTemplate      messagingTemplate;
-    private final UserSessionManagerForRedis sessionManager;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final UserSessionManager    sessionManager;
 
 
     /**

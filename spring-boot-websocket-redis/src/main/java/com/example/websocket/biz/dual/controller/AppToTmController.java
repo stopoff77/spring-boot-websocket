@@ -11,7 +11,7 @@ import com.example.websocket.biz.dual.dto.DualCallMessage;
 import com.example.websocket.biz.dual.dto.UserInfo;
 import com.example.websocket.configuration.redis.RedisPublisher;
 import com.example.websocket.configuration.websocket.session.dto.RelayMessage;
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
 import com.example.websocket.configuration.websocket.session.service.RedisSessionService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AppToTmController {
 
-    private final RedisPublisher             redisPublisher;
-    private final UserSessionManagerForRedis localSessionManager;
-    private final RedisSessionService        redisSessionService;
+    private final RedisPublisher      redisPublisher;
+    private final UserSessionManager  localSessionManager;
+    private final RedisSessionService redisSessionService;
 
 
     /**

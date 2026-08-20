@@ -11,6 +11,22 @@ public record RelayMessage(
         DualCallMessage payload) {
 
 
+    public String destination() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("/sub");
+
+        if ("TM".equals(targetClientType)) {
+            builder.append("/tm");
+        } else {
+            builder.append("/app");
+        }
+
+        builder.append("/").append(targetUserId);
+
+        return builder.toString();
+    }
+
+
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.JSON_STYLE);

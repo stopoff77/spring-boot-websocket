@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserSessionManagerForRedis {
+public class UserSessionManager {
 
     private final StringRedisTemplate redisTemplate;
 
@@ -87,10 +87,10 @@ public class UserSessionManagerForRedis {
     /**
      * 세션 종료 시 처리 (로컬 메모리 + Redis 전역 세션 동시 삭제)
      */
-    public void removeSession(String sessionId) {
+    public String removeSession(String sessionId) {
         String userId = sessionToUserMap.remove(sessionId);
         if (userId == null) {
-            return;
+            return null;
         }
 
         userSessionMap.computeIfPresent(userId, (key, existingSession) -> {
@@ -109,6 +109,8 @@ public class UserSessionManagerForRedis {
             // 두 세션 모두 해제되었으면 null을 반환하여 로컬 Map에서 삭제
             return updatedSession.isEmpty() ? null : updatedSession;
         });
+
+        return userId;
     }
 
     /**

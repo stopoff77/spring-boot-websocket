@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.example.websocket.biz.dual.dto.UserSessionStatus;
-import com.example.websocket.configuration.websocket.session.manager.UserSessionManagerForRedis;
+import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RedisSessionHealthScheduler {
 
-    private final UserSessionManagerForRedis sessionManager;
+    private final UserSessionManager sessionManager;
 
     /**
      * 30초마다 주기적으로 전체 웹소켓 연결 상태 점검 (30,000ms)
