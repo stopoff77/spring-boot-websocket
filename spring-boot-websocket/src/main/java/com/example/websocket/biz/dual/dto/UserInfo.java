@@ -1,17 +1,15 @@
-package com.example.websocket.biz.dto;
+package com.example.websocket.biz.dual.dto;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public record ChatMessage(
-        MessageType type,
-        String roomId,
-        String sender,
-        String message) {
-    public enum MessageType {
-        ENTER, TALK, LEAVE
-    }
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+public record UserInfo(
+        String userId,
+        String userName,
+        String deviceType) {
 
     @Override
     public String toString() {

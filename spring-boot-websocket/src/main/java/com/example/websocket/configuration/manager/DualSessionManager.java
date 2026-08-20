@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
-import com.example.websocket.biz.dto.UserSession;
+import com.example.websocket.biz.dual.dto.UserSession;
 import com.example.websocket.biz.dual.dto.UserSessionStatus;
 
 import lombok.extern.slf4j.Slf4j;

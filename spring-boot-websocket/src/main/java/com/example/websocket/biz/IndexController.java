@@ -1,4 +1,4 @@
-package com.example.websocket.biz.controller;
+package com.example.websocket.biz;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

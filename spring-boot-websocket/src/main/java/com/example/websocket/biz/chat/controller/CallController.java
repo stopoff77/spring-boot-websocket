@@ -1,12 +1,12 @@
-package com.example.websocket.biz.controller;
+package com.example.websocket.biz.chat.controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import com.example.websocket.biz.dto.CallMessage;
-import com.example.websocket.biz.dto.UserInfo;
+import com.example.websocket.biz.chat.dto.CallMessage;
+import com.example.websocket.biz.dual.dto.UserInfo;
 import com.example.websocket.configuration.manager.UserSessionManager;
 
 import lombok.RequiredArgsConstructor;

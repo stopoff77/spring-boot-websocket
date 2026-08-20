@@ -1,4 +1,4 @@
-package com.example.websocket.biz.controller;
+package com.example.websocket.biz.chat.controller;
 
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -6,7 +6,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-import com.example.websocket.biz.dto.ChatMessage;
+import com.example.websocket.biz.chat.dto.ChatMessage;
 import com.example.websocket.util.Util;
 
 import lombok.RequiredArgsConstructor;

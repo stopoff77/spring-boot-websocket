@@ -1,4 +1,4 @@
-package com.example.websocket.biz.dto;
+package com.example.websocket.biz.dual.dto;
 
 public record UserSession(
         String userId,

@@ -1,4 +1,4 @@
-package com.example.websocket.biz.controller.dual;
+package com.example.websocket.biz.dual.controller;
 
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -9,8 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import com.example.websocket.biz.dto.UserInfo;
-import com.example.websocket.biz.dto.dual.DualCallMessage;
+import com.example.websocket.biz.dual.dto.DualCallMessage;
+import com.example.websocket.biz.dual.dto.UserInfo;
 import com.example.websocket.configuration.manager.DualSessionManager;
 
 import lombok.RequiredArgsConstructor;
