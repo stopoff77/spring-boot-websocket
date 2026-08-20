@@ -28,19 +28,19 @@ dependencies {
 
     // Spring Boot Starters (버전은 dependency-management가 자동 관리)
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //  implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // Database
-    implementation 'org.springframework.boot:spring-boot-h2console'
+    //implementation 'org.springframework.boot:spring-boot-h2console'
     runtimeOnly 'com.h2database:h2'
-    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
     // Utility
     implementation 'org.apache.commons:commons-lang3'
+    //implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'

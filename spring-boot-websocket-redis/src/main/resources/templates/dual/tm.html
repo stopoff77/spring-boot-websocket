@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TM AP Client (수신측)</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+    <h2>🎧 TM AP System</h2>
+    
+    <div>
+        <label>User ID: </label>
+        <input type="text" id="userId" value="USER_01">
+        <button onclick="connectTm()">소켓 연결 및 수신 대기</button>
+        <button onclick="disconnect()" class="btn btn-secondary">웹소켓 연결 해제</button>
+    </div>
+
+    <h3>수신 로그</h3>
+    <pre id="log" style="background:#eef7ff; padding:10px;"></pre>
+
+    <script>
+        let stompClient = null;
+
+        function log(msg) {
+            document.getElementById('log').innerText += msg + '\n';
+        }
+
+        function connectTm() {
+            const userId = document.getElementById('userId').value;
+            const socket = new SockJS('http://localhost:8080/ws-for-tm');
+            stompClient = Stomp.over(socket);
+
+            // STOMP 연결 헤더 (UserSessionManager 구분값)
+            const headers = {
+                'userId': userId,
+                'clientType': 'TM'
+            };
+
+            stompClient.connect(headers, function (frame) {
+                log('✅ TM AP 웹소켓 연결 성공: ' + frame);
+
+                // 중계서버에서 messagingTemplate.convertAndSendToUser로 토스하는 개인 Queue 구독
+                //stompClient.subscribe('/user/sub/tm/queue', function (response) {
+                stompClient.subscribe('/sub/tm/' + userId, function (response) {
+                    const data = JSON.parse(response.body);
+                    log('📩 [앱으로부터 메시지 수신] ' + JSON.stringify(data));
+                });
+                
+                log('📡 [/sub/tm/queue] 구독 시작완료...');
+            }, function (error) {
+                log('❌ 연결 실패: ' + error);
+            });
+        }
+
+        // 연결 해제
+        function disconnect() {
+            if (stompClient !== null && stompClient.connected) {
+                stompClient.disconnect(function () {
+                    log('🔌 DISCONNECTED: 웹소켓 연결이 해제되었습니다.');
+                });
+            } else {
+                log('🔌 웹소켓 연결을 먼저 진행해 주세요.');
+            }
+        }
+    </script>
+</body>
+</html>

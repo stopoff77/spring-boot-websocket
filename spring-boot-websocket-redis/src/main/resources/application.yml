@@ -1,0 +1,50 @@
+#
+
+spring:
+  profiles:
+    active: local
+  config:
+    import:
+      - classpath:datasource-memory-for-local.yml
+  application:
+    name: spring-boot4-websocket
+  aop: #
+    proxy-target-class: true # default true
+    auto: true # default true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      #password: 1234
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+# thymleaf
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:templates/
+    suffix: .html
+    mode: HTML
+    cache: false #cache 사용안함
+#    order: 0
+
+
+# logging
+logging:
+  pattern:
+    console: "%d{MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%t] %clr(%logger{36}){cyan} [%L] | %msg%n"
+  level:
+    # SQL LOG
+    jdbc: OFF
+    jdbc.audit: OFF
+    jdbc.connection: OFF
+    jdbc.resultset: OFF
+    jdbc.resultsettable: INFO
+    jdbc.sqlonly: OFF
+    jdbc.sqltiming: DEBUG
+
+    root: INFO
+    com.example : DEBUG
+

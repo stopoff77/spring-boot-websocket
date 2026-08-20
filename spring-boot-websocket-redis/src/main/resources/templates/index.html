@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket STOMP Test</title>
+    <!-- SockJS 및 STOMP 클라이언트 라이브러리 CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+    <h2>Spring Boot WebSocket STOMP 테스트</h2>
+
+    <div>
+        <label>채팅방 ID: </label>
+        <input type="text" id="roomId" value="room1" /><br/>
+        <label>보내는 사람: </label>
+        <input type="text" id="sender" value="홍길동" /><br/><br/>
+        
+        <button onclick="connect()">웹소켓 연결</button>
+        <button onclick="disconnect()">연결 해제</button>
+    </div>
+
+    <hr/>
+
+    <div>
+        <label>메시지: </label>
+        <input type="text" id="message" style="width: 300px;" placeholder="메시지를 입력하세요" />
+        <button onclick="sendMessage('TALK')">전송</button>
+        <button onclick="sendMessage('ENTER')">입장 메시지 전송</button>
+    </div>
+
+    <hr/>
+
+    <h3>수신 메시지 로그</h3>
+    <div id="log" style="border: 1px solid #ccc; height: 200px; overflow-y: scroll; padding: 10px; background: #f9f9f9;"></div>
+
+    <script>
+        let stompClient = null;
+
+        // 1. 웹소켓 연결 및 구독
+        function connect() {
+            const roomId = document.getElementById('roomId').value;
+
+            // WebSocketConfig에서 설정한 엔드포인트(/ws-for-app)로 SockJS 연결
+            const socket = new SockJS('http://localhost:8080/ws-for-app');
+            stompClient = Stomp.over(socket);
+
+            // STOMP 디버그 콘솔 출력 옵션 (필요 시 console.log로 변경)
+            // stompClient.debug = null;
+
+            stompClient.connect({}, function (frame) {
+                logMessage('CONNECTED: ' + frame);
+
+                // 특정 채팅방 채널 구독 (/sub/chat/room/{roomId})
+                stompClient.subscribe('/sub/chat/room/' + roomId, function (chatMessage) {
+                    const body = JSON.parse(chatMessage.body);
+                    logMessage(`[수신] ${body.sender}: ${body.message} (${body.type})`);
+                });
+            }, function (error) {
+                logMessage('ERROR: ' + error);
+            });
+        }
+
+        // 2. 메시지 발행(전송)
+        function sendMessage(type) {
+            if (!stompClient || !stompClient.connected) {
+                alert('먼저 웹소켓을 연결하세요.');
+                return;
+            }
+
+            const roomId = document.getElementById('roomId').value;
+            const sender = document.getElementById('sender').value;
+            const message = document.getElementById('message').value;
+
+            const payload = {
+                type: type, // 'ENTER' 또는 'TALK'
+                roomId: roomId,
+                sender: sender,
+                message: message
+            };
+
+            // 서버 컨트롤러로 메시지 송신 (/pub/chat/message)
+            stompClient.send('/pub/chat/message', {}, JSON.stringify(payload));
+            document.getElementById('message').value = '';
+        }
+
+        // 3. 연결 해제
+        function disconnect() {
+            if (stompClient !== null && stompClient.connected) {
+                const roomId = document.getElementById('roomId').value;
+                const sender = document.getElementById('sender').value;
+        
+                // 1. 서버로 전송할 LEAVE 타입의 JSON 페이로드 생성
+                const leavePayload = {
+                    type: 'LEAVE',
+                    roomId: roomId,
+                    sender: sender,
+                    message: sender + '님이 퇴장하셨습니다.'
+                };
+        
+                // 2. 서버의 /pub/chat/message 경로로 퇴장 메시지 송신
+                stompClient.send('/pub/chat/message', {}, JSON.stringify(leavePayload));
+        
+                // 3. 메시지 전송 후 즉시 끊지 않고, 네트워크 패킷 전송 시간을 위해 disconnect 처리
+                // (필요 시 callback이나 약 100~200ms 정도의 delay를 두고 종료)
+                stompClient.disconnect(function () {
+                    logMessage('DISCONNECTED: 서버로 퇴장 메시지를 보내고 안전하게 종료되었습니다.');
+                });
+            }
+        }
+
+        // 화면에 로그 출력
+        function logMessage(msg) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `<div>${msg}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
