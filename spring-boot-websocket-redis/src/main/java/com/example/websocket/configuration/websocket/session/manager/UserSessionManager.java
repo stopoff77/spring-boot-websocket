@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import com.example.websocket.biz.Const;
 import com.example.websocket.biz.dual.dto.UserSessionStatus;
 import com.example.websocket.configuration.websocket.session.dto.UserSession;
 
@@ -43,10 +44,10 @@ public class UserSessionManager {
                     ? existingSession
                     : new UserSession(userId, null, null);
 
-            if ("APP".equals(upperType)) {
+            if (Const.APP.equals(upperType)) {
                 log.info("📱 [앱 세션 매핑 완료] User: {} <-> AppSession: {}", userId, sessionId);
                 return session.withAppSessionId(sessionId);
-            } else if ("TM".equals(upperType)) {
+            } else if (Const.TM.equals(upperType)) {
                 log.info("🎧 [TM AP 세션 매핑 완료] User: {} <-> TmSession: {}", userId, sessionId);
                 return session.withTmSessionId(sessionId);
             }
@@ -80,7 +81,7 @@ public class UserSessionManager {
      * Redis 전역 클러스터 내 특정 사용자의 TM 세션 존재 여부 확인
      */
     public boolean isTmConnectedGlobal(String userId) {
-        Boolean hasKey = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, "TM");
+        Boolean hasKey = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, Const.TM);
         return Boolean.TRUE.equals(hasKey);
     }
 
@@ -98,11 +99,11 @@ public class UserSessionManager {
 
             if (sessionId.equals(existingSession.appSessionId())) {
                 updatedSession = existingSession.withAppSessionId(null);
-                redisTemplate.opsForHash().delete(REDIS_KEY_PREFIX + userId, "APP");
+                redisTemplate.opsForHash().delete(REDIS_KEY_PREFIX + userId, Const.APP);
                 log.info("❌ [앱 세션 해제] User: {}", userId);
             } else if (sessionId.equals(existingSession.tmSessionId())) {
                 updatedSession = existingSession.withTmSessionId(null);
-                redisTemplate.opsForHash().delete(REDIS_KEY_PREFIX + userId, "TM");
+                redisTemplate.opsForHash().delete(REDIS_KEY_PREFIX + userId, Const.TM);
                 log.info("❌ [TM 세션 해제] User: {}", userId);
             }
 
@@ -117,8 +118,8 @@ public class UserSessionManager {
      * 특정 사용자의 전역(Redis) 연결 상태 조회
      */
     public UserSessionStatus getSessionStatus(String userId) {
-        Boolean isAppConnected = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, "APP");
-        Boolean isTmConnected  = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, "TM");
+        Boolean isAppConnected = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, Const.APP);
+        Boolean isTmConnected  = redisTemplate.opsForHash().hasKey(REDIS_KEY_PREFIX + userId, Const.TM);
 
         return UserSessionStatus.of(
                 userId,

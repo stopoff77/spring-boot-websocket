@@ -3,6 +3,7 @@ package com.example.websocket.configuration.websocket.session.dto;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.example.websocket.biz.Const;
 import com.example.websocket.biz.dual.dto.DualCallMessage;
 
 public record RelayMessage(
@@ -15,7 +16,7 @@ public record RelayMessage(
         StringBuilder builder = new StringBuilder();
         builder.append("/sub");
 
-        if ("TM".equals(targetClientType)) {
+        if (Const.TM.equals(targetClientType)) {
             builder.append("/tm");
         } else {
             builder.append("/app");

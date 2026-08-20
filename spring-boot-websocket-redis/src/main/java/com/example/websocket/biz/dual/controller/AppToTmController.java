@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import com.example.websocket.biz.Const;
 import com.example.websocket.biz.dual.dto.DualCallMessage;
 import com.example.websocket.biz.dual.dto.UserInfo;
 import com.example.websocket.configuration.redis.RedisPublisher;
@@ -62,7 +63,7 @@ public class AppToTmController {
         log.info("📩 [앱 메시지 수신] User: {}, Payload: {}", userId, payload);
 
         // 1. Redis 전역 세션에서 TM AP 연결 여부 확인 (어느 WAS에 연결되어 있든 상관없이 검증 가능)
-        boolean isTmOnline = redisSessionService.isGlobalConnected(userId, "TM");
+        boolean isTmOnline = redisSessionService.isGlobalConnected(userId, Const.TM);
 
         if (!isTmOnline) {
             log.warn("⚠️ [토스 실패] 전역 TM AP 세션이 존재하지 않습니다. User: {}", userId);
@@ -73,12 +74,42 @@ public class AppToTmController {
                     "TM 상담원 소켓 연결이 존재하지 않아 메시지 전달에 실패했습니다.");
 
             // 실패 메시지를 Redis로 발행하여 앱이 연결된 WAS로 전달
-            redisPublisher.publish(new RelayMessage(userId, "APP", failResponse));
+            redisPublisher.publish(new RelayMessage(userId, Const.APP, failResponse));
             return;
         }
 
         // 2. TM AP가 클러스터 내(WAS 1, WAS 2 등)에 존재하므로 Redis Topic으로 메시지 전파
-        RelayMessage relayMessage = new RelayMessage(userId, "TM", payload);
+        RelayMessage relayMessage = new RelayMessage(userId, Const.TM, payload);
+        redisPublisher.publish(relayMessage);
+
+        log.info("▶ [Redis Pub 전파 완료] Target User: {}", userId);
+    }
+
+
+    @MessageMapping("/tm/to-app2")
+    public void relayTmMessageToApp(@Payload DualCallMessage payload,
+            @Header("userId") String userId) {
+
+        log.info("📩 [TM 메시지 수신] User: {}, Payload: {}", userId, payload);
+
+        // 1. Redis 전역 세션에서 TM AP 연결 여부 확인 (어느 WAS에 연결되어 있든 상관없이 검증 가능)
+        boolean isAppOnline = redisSessionService.isGlobalConnected(userId, Const.APP);
+
+        if (!isAppOnline) {
+            log.warn("⚠️ [토스 실패] 전역 APP 세션이 존재하지 않습니다. User: {}", userId);
+
+            DualCallMessage failResponse = new DualCallMessage(
+                    "SYSTEM",
+                    "FAIL",
+                    "APP 소켓 연결이 존재하지 않아 메시지 전달에 실패했습니다.");
+
+            // 실패 메시지를 Redis로 발행하여 앱이 연결된 WAS로 전달
+            redisPublisher.publish(new RelayMessage(userId, Const.TM, failResponse));
+            return;
+        }
+
+        // 2. TM AP가 클러스터 내(WAS 1, WAS 2 등)에 존재하므로 Redis Topic으로 메시지 전파
+        RelayMessage relayMessage = new RelayMessage(userId, Const.APP, payload);
         redisPublisher.publish(relayMessage);
 
         log.info("▶ [Redis Pub 전파 완료] Target User: {}", userId);

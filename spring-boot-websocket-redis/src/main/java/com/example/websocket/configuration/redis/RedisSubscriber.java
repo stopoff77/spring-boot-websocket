@@ -4,6 +4,7 @@ package com.example.websocket.configuration.redis;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.websocket.biz.Const;
 import com.example.websocket.configuration.websocket.session.dto.RelayMessage;
 import com.example.websocket.configuration.websocket.session.manager.UserSessionManager;
 
@@ -28,7 +29,7 @@ public class RedisSubscriber {
             String       destination      = relayMessage.destination();                             // 업무별 지정된 최종 목적지 주소
 
             // 1. TM AP로 전달해야 하는 경우
-            if ("TM".equalsIgnoreCase(targetClientType)) {
+            if (Const.TM.equalsIgnoreCase(targetClientType)) {
                 String localTmSessionId = localSessionManager.getTmSessionId(targetUserId);
 
                 // 본 WAS에 TM AP 웹소켓 세션이 존재하는 경우에만 실제 발송
@@ -41,7 +42,7 @@ public class RedisSubscriber {
                 }
             }
             // 2. 앱(APP)으로 실패/응답 메시지를 전달해야 하는 경우
-            else if ("APP".equalsIgnoreCase(targetClientType)) {
+            else if (Const.APP.equalsIgnoreCase(targetClientType)) {
                 String localAppSessionId = localSessionManager.getAppSessionId(targetUserId);
 
                 if (localAppSessionId != null) {
